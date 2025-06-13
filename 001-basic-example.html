@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic example</title>
+  </head>
+  <body>
+    <div id="wrapper"></div>
+    <script src="https://unpkg.com/json5/dist/index.min.js"></script>
+    <script src="https://unpkg.com/dompurify/dist/purify.min.js"></script>
+    <script src="https://unpkg.com/hmpl-js/dist/hmpl.min.js"></script>
+    <script>
+      const templateFn = hmpl.compile(
+        `<div>
+          <button id="getInfo">Get package info!</button><br/>
+          Package info:
+          {{#request
+              src="https://unpkg.com/hmpl-js/package.json"
+              after="click:#getInfo"
+              allowedContentTypes=["application/json"]
+          }}
+            {{#indicator trigger="pending"}}
+              <span>Loading...</span>
+            {{/indicator}}
+            {{#indicator trigger="error"}}
+              <span>Error sending request</span>
+            {{/indicator}}
+          {{/request}}
+        </div>`
+      );
+
+      const wrapper = document.getElementById("wrapper");
+
+      const elementObj = templateFn();
+
+      wrapper.appendChild(elementObj.response);
+    </script>
+  </body>
+</html>
